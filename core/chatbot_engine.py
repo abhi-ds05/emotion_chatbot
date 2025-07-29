@@ -19,7 +19,7 @@ class ChatbotEngine:
             print("⚠️ Warning: CUDA is not available. Running this model on CPU may be very slow.")
 
         # Load model and tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token, use_fast=False)
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,
             torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,

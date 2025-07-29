@@ -1,0 +1,39 @@
+# === Core NLP & Transformers ===
+transformers==4.38.2                 # stable version for Mistral
+torch==2.2.2+cu118                   # match with CUDA 11.8
+torchvision==0.17.2+cu118
+torchaudio==2.2.2+cu118
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+sentencepiece==0.1.99               # pin for compatibility with some tokenizers
+accelerate==0.27.2                  # for device mapping and model offloading
+
+# === FastAPI for API and Routing ===
+fastapi==0.110.1
+uvicorn[standard]==0.29.0
+
+# === Optional: UI Interfaces ===
+gradio==4.36.0                       # for local testing or demos
+# streamlit==1.35.0                 # optional alternative to Gradio
+
+# === Emotion Detection (Multimodal Support) ===
+opencv-python-headless==4.9.0.80    # headless to avoid GUI dependencies
+librosa==0.10.1
+scikit-learn==1.3.2
+pandas==2.2.2
+
+# === Hugging Face Utilities ===
+datasets==2.16.1
+huggingface_hub==0.20.3
+hf_xet                               # optional: faster downloads (Xet-enabled repos)
+
+# === Logging & Utilities ===
+loguru==0.7.2
+pydantic==2.5.3
+python-dotenv==1.0.1
+typer[all]==0.12.3
+
+# === Testing ===
+pytest==8.2.1
+httpx==0.27.0
+pytest-asyncio==0.23.6

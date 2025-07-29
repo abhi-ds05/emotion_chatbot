@@ -1,0 +1,105 @@
+# === Python Build / Bytecode ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.dll
+*~
+
+# === Virtual Environments ===
+.venv/
+venv/
+ENV/
+env/
+*.env
+.env
+.env.*
+*.venv
+venv310/
+
+
+# === IDE / Editor Settings ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# === Jupyter Notebook Checkpoints ===
+.ipynb_checkpoints/
+
+# === Logs & Runtime Files ===
+logs/
+*.log
+*.db
+*.sqlite
+nohup.out
+
+# === OS-specific Files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Hugging Face Cache ===
+.cache/huggingface/
+C:/Users/KUMAR ABHISHEK/.cache/huggingface/
+*.safetensors
+*.bin
+*.pt
+
+# === Large Files & Datasets ===
+data/models/
+data/ckpts/
+*.ckpt
+*.weights
+*.tar.gz
+*.zip
+*.pkl
+
+# === MELD Dataset Specific ===
+data/datasets/MELD/MELD.Raw.tar.gz
+data/datasets/MELD/MELD.Raw/*.tar
+data/datasets/MELD/MELD.Raw/train/
+data/datasets/MELD/MELD.Raw/dev/
+data/datasets/MELD/MELD.Raw/test/
+data/datasets/MELD/MELD.Raw/**/*.mp4
+data/datasets/MELD/MELD.Raw/**/*.tar.gz
+
+# === Output folders ===
+outputs/
+checkpoints/
+runs/
+wandb/
+
+# === Python Environment ===
+pip-log.txt
+python-out.txt
+test-results/
+
+# === Lint / Coverage Reports ===
+.coverage
+htmlcov/
+.mypy_cache/
+.pytest_cache/
+.pytype/
+
+# === Dataset Cache ===
+data/.cache/
+*.parquet
+*.csv
+
+# === Streamlit / Gradio ===
+.streamlit/
+gradio_cached_examples/
+
+# === Docker / K8s Files ===
+*.pid
+docker-compose.override.yml
+
+# === Misc ===
+*.bak
+*.swp
+*.tmp
+*.orig
+"venv310/" 

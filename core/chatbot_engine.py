@@ -1,52 +1,49 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+# services/nlp_services.py
+
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
-from dotenv import load_dotenv
-import os
 
-class ChatbotEngine:
-    def __init__(self, model_name: str = "mistralai/Mistral-7B-Instruct-v0.2"):
-        """
-        Initializes the chatbot engine using a Hugging Face model and token.
-        HF_TOKEN must be present in the .env file.
-        """
-        load_dotenv()
-        hf_token = os.getenv("HF_TOKEN")
+class EmotionClassifierService:
+    """
+    Service for detecting emotions from text using a Transformers-based classifier.
+    """
 
-        if hf_token is None:
-            raise ValueError("HF_TOKEN not found in environment variables. Please set it in .env")
+    def __init__(self, model_name: str, hf_token: str = None):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name, use_auth_token=hf_token).to(self.device)
+        self.model.eval()
+        self.label_map = self.model.config.id2label  # Auto from model
 
-        if not torch.cuda.is_available():
-            print("⚠️ Warning: CUDA is not available. Running this model on CPU may be very slow.")
+    def predict(self, text: str) -> str:
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("Input text must be a non-empty string.")
+        encoded = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+        encoded = {k: v.to(self.device) for k, v in encoded.items()}
+        with torch.no_grad():
+            output = self.model(**encoded)
+        pred_label = torch.argmax(output.logits, dim=1).item()
+        return self.label_map[pred_label]
 
-        # Load model and tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token, use_fast=False)
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-            device_map="auto",
-            token=hf_token
-        )
+    def predict_proba(self, text: str) -> dict:
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("Input text must be a non-empty string.")
+        encoded = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+        encoded = {k: v.to(self.device) for k, v in encoded.items()}
+        with torch.no_grad():
+            output = self.model(**encoded)
+            probs = torch.softmax(output.logits, dim=1).cpu().squeeze().tolist()
+        return {self.label_map[i]: float(probs[i]) for i in range(len(probs))}
 
-        # ✅ DON'T manually set `device` if using `device_map="auto"`
-        self.generator = pipeline(
-            "text-generation",
-            model=self.model,
-            tokenizer=self.tokenizer
-        )
 
-    def generate(self, prompt: str, max_new_tokens: int = 128, **kwargs) -> str:
-        """
-        Generates a response to the given prompt using the language model.
-        """
-        if not isinstance(prompt, str):
-            raise TypeError("Prompt must be a string")
+# Example usage
+if __name__ == "__main__":
+    MODEL_NAME = "j-hartmann/emotion-english-distilroberta-base"
+    HF_TOKEN = None  # Or os.getenv("HF_TOKEN")
 
-        outputs = self.generator(
-            prompt,
-            max_new_tokens=max_new_tokens,
-            do_sample=True,
-            top_p=0.9,
-            temperature=0.7,
-            **kwargs
-        )
-        return outputs[0]["generated_text"].replace(prompt, "").strip()
+    classifier = EmotionClassifierService(model_name=MODEL_NAME, hf_token=HF_TOKEN)
+    test_sentence = "I'm so happy to see you!"
+    emotion = classifier.predict(test_sentence)
+    proba = classifier.predict_proba(test_sentence)
+    print(f"Emotion: {emotion}")
+    print(f"Probabilities: {proba}")

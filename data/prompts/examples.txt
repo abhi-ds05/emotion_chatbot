@@ -1,0 +1,59 @@
+User: I'm so excited for the trip tomorrow!
+Emotion: joy
+Bot: That's wonderful! I hope your trip is full of great memories.
+
+User: I just failed my exam... I feel terrible.
+Emotion: sadness
+Bot: I'm really sorry to hear that. Remember, one exam doesn't define you—hang in there.
+
+User: Why did you even bother asking if you don’t care?
+Emotion: anger
+Bot: I understand this is frustrating. If you'd like to talk more, I'm here to listen.
+
+User: I'm nervous about my presentation.
+Emotion: fear
+Bot: It's natural to feel nervous, but I believe you'll do great. Let me know if you want any tips!
+
+User: Nothing special, just passing the time.
+Emotion: neutral
+Bot: Got it! If you want to chat or need anything, just let me know.
+
+User: That was hilarious! You always crack me up.
+Emotion: amusement
+Bot: I'm glad to bring a smile to your face!
+
+User: I feel so proud of what I accomplished today.
+Emotion: pride
+Bot: That’s fantastic! You deserve all the praise for your hard work.
+
+User: I'm confused about what to do next.
+Emotion: confusion
+Bot: It's okay to feel that way. Let's try to figure it out together.
+
+User: I love spending time with my family.
+Emotion: love
+Bot: Family time is precious. It’s great that you cherish those moments.
+
+User: Wow, I did not expect that at all!
+Emotion: surprise
+Bot: Life is full of surprises! Hope it was a good one.
+
+User: I'm feeling overwhelmed with everything going on.
+Emotion: sadness
+Bot: That sounds tough. Remember to take breaks and take care of yourself.
+
+User: I'm so grateful for your help.
+Emotion: gratitude
+Bot: You're very welcome! I'm happy to help anytime.
+
+User: This situation disgusts me.
+Emotion: disgust
+Bot: I can understand why you feel that way. Let’s try to focus on what we can do next.
+
+User: I'm really looking forward to the weekend.
+Emotion: anticipation
+Bot: It's great to have something to look forward to!
+
+User: I'm feeling pretty calm today.
+Emotion: calmness
+Bot: That’s wonderful! Staying calm is important for well-being.

@@ -1,13 +1,13 @@
 # core/response_generator.py
 
 from typing import Optional, Dict, Any, List
-from core.chatbot_engine import ChatbotEngine  # Your LLM handler
-from core.memory_manager import MemoryManager  # Persistent chat history
-from core.user_state_tracker import UserStateTracker  # Tracks user emotion state
+from core.chatbot_engine import ChatbotEngine  # Handles LLM-based response generation
+from core.memory_manager import MemoryManager  # Stores session-level chat history
+from core.user_state_tracker import UserStateTracker  # Tracks emotion history
 
 class ResponseGenerator:
     def __init__(self):
-        self.engine = ChatbotEngine()
+        self.engine = ChatbotEngine()  # Load a lightweight model inside this engine
         self.memory = MemoryManager()
         self.user_tracker = UserStateTracker()
     
@@ -18,44 +18,35 @@ class ResponseGenerator:
         emotion: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        Generate a chatbot response informed by prior memory and user emotion.
-        
-        Args:
-            user_id (str): Unique identifier for the user/session.
-            user_message (str): The input message from the user.
-            emotion (Optional[str]): The detected emotion of the user.
-
-        Returns:
-            Dict[str, Any]: Contains chatbot response text, context emotion, and chat history.
+        Generate an LLM-based chatbot response using history and detected emotion.
         """
-
-        # Retrieve previous chat history & memory for context
+        # Load past context
         chat_history = self.memory.get_history(user_id)
         user_emotion_history = self.user_tracker.get_emotion_history(user_id)
 
-        # Update user emotion state tracker
+        # Track emotion
         if emotion:
             self.user_tracker.update_emotion(user_id, emotion)
-        
-        # Compose prompt/input for the chatbot engine, including memory and emotion context
+
+        # Build conversational prompt
         prompt = self._build_prompt(user_message, chat_history, emotion)
 
-        # Generate response from LLM/chat engine
-        response_text = self.engine.generate(prompt)
+        try:
+            # Get response from the LLM engine
+            response_text = self.engine.generate(prompt)
+        except Exception as e:
+            response_text = f"Sorry, I encountered an error generating a response. ({e})"
 
-        # Update memory with new turn
+        # Log the conversation turn
         self.memory.update_history(user_id, {"role": "user", "message": user_message, "emotion": emotion})
         self.memory.update_history(user_id, {"role": "bot", "message": response_text})
 
-        # Optional: track or integrate emotion into response generation, analytics, etc.
-        context_emotion = emotion or "neutral"
-
         return {
             "response": response_text,
-            "context_emotion": context_emotion,
+            "context_emotion": emotion or "neutral",
             "chat_history": self.memory.get_history(user_id)
         }
-    
+
     def _build_prompt(
         self,
         user_message: str,
@@ -63,14 +54,14 @@ class ResponseGenerator:
         emotion: Optional[str]
     ) -> str:
         """
-        Create a prompt string for the chatbot engine using conversation history and detected emotion.
+        Construct the full prompt using memory and emotion context.
         """
-        # Example simplistic prompt builder: concatenate recent messages + emotion label
         prompt_parts = []
-        for turn in chat_history[-10:]:  # last 10 turns
+
+        for turn in chat_history[-10:]:  # Keep last 10 turns
             role = turn.get("role", "user")
-            msg = turn.get("message", "")
-            prompt_parts.append(f"{role}: {msg}")
+            message = turn.get("message", "")
+            prompt_parts.append(f"{role}: {message}")
 
         if emotion:
             prompt_parts.append(f"[User is feeling {emotion}]")

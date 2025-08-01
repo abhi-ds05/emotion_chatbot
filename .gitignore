@@ -27,6 +27,7 @@ venv310/
 
 # === Jupyter Notebook Checkpoints ===
 .ipynb_checkpoints/
+notebooks/**/.ipynb_checkpoints/
 
 # === Logs & Runtime Files ===
 logs/
@@ -48,34 +49,56 @@ C:/Users/KUMAR ABHISHEK/.cache/huggingface/
 *.bin
 *.pt
 
-# === Large Files & Datasets ===
-data/models/
-data/ckpts/
-*.ckpt
-*.weights
-*.tar.gz
-*.zip
-*.pkl
+# === Virtualization / Docker / K8s ===
+*.pid
+docker-compose.override.yml
 
-# === MELD Dataset Specific ===
+# === Notebook Output Artifacts ===
+notebooks/output_*/
+
+# === Model Checkpoints & Artifacts ===
+data/models/**/pytorch_model.bin
+data/models/**/tf_model.h5
+data/models/**/training_args.bin
+data/models/**/optimizer.pt
+data/models/**/checkpoint-*/
+!data/models/**/config.json
+!data/models/**/tokenizer_config.json
+!data/models/**/tokenizer.json
+!data/models/**/vocab.txt
+!data/models/**/id2label.json
+
+# === MELD Dataset Specific Files ===
 data/datasets/MELD/MELD.Raw.tar.gz
 data/datasets/MELD/MELD.Raw/**/*.tar
+data/datasets/MELD/MELD.Raw/**/*.tar.gz
+data/datasets/MELD/MELD.Raw/**/*.mp4
 data/datasets/MELD/MELD.Raw/train/
 data/datasets/MELD/MELD.Raw/dev/
 data/datasets/MELD/MELD.Raw/test/
-data/datasets/MELD/MELD.Raw/**/*.mp4
-data/datasets/MELD/MELD.Raw/**/*.tar.gz
+data/datasets/MELD/**/formatted_*.csv
 
-# === Notebook Output Artifacts ===
-notebooks/output_emotion_baseline/
+# === Dataset / Data Cache ===
+data/.cache/
+data/ckpts/
+data/datasets/**/*.zip
+data/datasets/**/*.tar.gz
+*.pkl
+*.ckpt
+*.weights
 
-# === Output Folders ===
-outputs/
-checkpoints/
-runs/
-wandb/
+# === Outputs (Model Predictions, Logs, etc.) ===
+data/outputs/
+data/outputs/**/*.csv
+data/outputs/**/*.json
+data/outputs/**/*.log
+data/outputs/**/*.txt
 
-# === Python Environment ===
+# === Streamlit / Gradio / Frontend ===
+.streamlit/
+gradio_cached_examples/
+
+# === Python Env / Pip / Test Artifacts ===
 pip-log.txt
 python-out.txt
 test-results/
@@ -87,20 +110,7 @@ htmlcov/
 .pytest_cache/
 .pytype/
 
-# === Dataset Cache ===
-data/.cache/
-*.parquet
-*.csv
-
-# === Streamlit / Gradio ===
-.streamlit/
-gradio_cached_examples/
-
-# === Docker / K8s Files ===
-*.pid
-docker-compose.override.yml
-
-# === Misc ===
+# === Miscellaneous Temp / Backup ===
 *.bak
 *.swp
 *.tmp
